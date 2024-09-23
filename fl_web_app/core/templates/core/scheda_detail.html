@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<h4>Dettaglio Scheda di Lavorazione</h4>
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5>Scheda n. {{ scheda.id_scheda }}</h5>
+        </div>
+        <div class="card-body">
+            <p><strong>Data Creazione:</strong> {{ scheda.created_at }}</p>
+            <p><strong>Cliente:</strong> {{ scheda.idcliente }}</p>
+            <p><strong>Gruppo:</strong> {{ scheda.idgruppo }}</p>
+
+            <!-- Mostra il codice a barre -->
+            <div>
+                <h6>Codice a Barre:</h6>
+                <img src="data:image/png;base64,{{ barcode_image }}" alt="Codice a Barre">
+            </div>
+            
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'home' %}" class="btn btn-secondary">Torna alla lista</a>
+        </div>
+    </div>
+{% endblock %}

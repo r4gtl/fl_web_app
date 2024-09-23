@@ -1,0 +1,34 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <h4>Lista delle Schede di Lavorazione</h4>
+    
+        <table class="table table-dark table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Scheda n.</th>
+                <th scope="col">Data Scheda</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Articolo</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for scheda in schede %}
+            <tr onclick="window.location='{% url 'core:scheda_detail' scheda.id_scheda %}';" style="cursor: pointer;">
+
+                <td>{{ scheda.id_scheda }}</td>
+                <td>{{ scheda.created_at }}</td>
+                <td>{{ scheda.idcliente }}</td>
+                <td>{{ scheda.idgruppo }}</td>
+                
+            </tr>
+            </tbody>
+
+            {% empty %}
+                <li>Nessuna scheda di lavorazione disponibile.</li>
+            {% endfor %}
+        </table>
+              
+        
+    
+{% endblock %}

@@ -159,6 +159,9 @@ class ProgrammaPressa(models.Model):
     class Meta:
         managed = False
         db_table = 'programma_pressa'
+        
+    def __str__(self):
+        return self.descrizione
 
 
 class Ricetta(models.Model):
@@ -241,18 +244,21 @@ class RiscontroPressa(models.Model):
 
 class SchedaLavorazione(models.Model):
     id_scheda = models.AutoField(primary_key=True)
-    id_ricetta = models.ForeignKey('Ricetta', on_delete=models.CASCADE, blank=True, null=True)
-    idcliente = models.ForeignKey('TblClienti', on_delete=models.CASCADE, blank=True, null=True)
-    idgruppo = models.ForeignKey('Tblgruppi', on_delete=models.CASCADE ,blank=True, null=True)
-    idcolore = models.ForeignKey('TblColori', on_delete=models.CASCADE ,blank=True, null=True)
-    idtipostampa = models.ForeignKey('Tbltipistampe', on_delete=models.CASCADE, blank=True, null=True)
-    idfase = models.ForeignKey('Tblfasi', on_delete=models.CASCADE, blank=True, null=True)
+    id_ricetta = models.ForeignKey('Ricetta', on_delete=models.CASCADE, blank=True, null=True, db_column='id_ricetta')
+    idcliente = models.ForeignKey('TblClienti', on_delete=models.CASCADE, blank=True, null=True, db_column='idcliente')
+    idgruppo = models.ForeignKey('Tblgruppi', on_delete=models.CASCADE ,blank=True, null=True, db_column='idgruppo')
+    idcolore = models.ForeignKey('TblColori', on_delete=models.CASCADE ,blank=True, null=True, db_column='idcolore')
+    idtipostampa = models.ForeignKey('Tbltipistampe', on_delete=models.CASCADE, blank=True, null=True, db_column='idtipostampa')
+    idfase = models.ForeignKey('Tblfasi', on_delete=models.CASCADE, blank=True, null=True, db_column='idfase')
     created_at = models.DateField(auto_now_add=True, blank=True, null=True)
     rif_ddt = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'scheda_lavorazione'
+    
+    def __str__(self):
+        return (f"Scheda N. {self.id_scheda} del {self.created_at}")
 
 
 class Tblazienda(models.Model):
@@ -294,6 +300,9 @@ class Tblclienti(models.Model):
     class Meta:
         managed = False
         db_table = 'tblClienti'
+    
+    def __str__(self):
+        return self.ragionesociale
 
 
 class Tblcolori(models.Model):
@@ -303,6 +312,9 @@ class Tblcolori(models.Model):
     class Meta:
         managed = False
         db_table = 'tblColori'
+    
+    def __str__(self):
+        return self.colore
 
 
 class Tblddtingresso(models.Model):
@@ -382,6 +394,9 @@ class Tblfasi(models.Model):
     class Meta:
         managed = False
         db_table = 'tblFasi'
+    
+    def __str__(self):
+        return self.fase
 
 
 
@@ -393,6 +408,9 @@ class Tblgruppi(models.Model):
     class Meta:
         managed = False
         db_table = 'tblGruppi'
+    
+    def __str__(self):
+        return self.descrizione
 
 
 class Tblimpeff(models.Model):
@@ -442,6 +460,9 @@ class Tblmacchine(models.Model):
     class Meta:
         managed = False
         db_table = 'tblMacchine'
+        
+    def __str__(self):
+        return self.descrizione
 
 
 class Tblmatinlavoro(models.Model):
@@ -466,6 +487,9 @@ class Tblmateriali(models.Model):
     class Meta:
         managed = False
         db_table = 'tblMateriali'
+        
+    def __str__(self):
+        return self.materiale
 
 
 class Tblstoccaggio(models.Model):
@@ -488,6 +512,9 @@ class Tbltaglie(models.Model):
     class Meta:
         managed = False
         db_table = 'tblTaglie'
+        
+    def __str__(self):
+        return self.taglia
 
 
 class Tbltipistampe(models.Model):
@@ -497,6 +524,9 @@ class Tbltipistampe(models.Model):
     class Meta:
         managed = False
         db_table = 'tblTipiStampe'
+        
+    def __str__(self):
+        return self.tipostampa
 
 
 class Tblum(models.Model):
@@ -506,6 +536,9 @@ class Tblum(models.Model):
     class Meta:
         managed = False
         db_table = 'tblUM'
+        
+    def __str__(self):
+        return self.um
 
 
 class Tblzonemagazzino(models.Model):
@@ -515,6 +548,9 @@ class Tblzonemagazzino(models.Model):
     class Meta:
         managed = False
         db_table = 'tblZoneMagazzino'
+        
+    def __str__(self):
+        return self.zonamagazzino
 
 
 class TblPercorso(models.Model):
@@ -532,3 +568,6 @@ class TipoMacchina(models.Model):
     class Meta:
         managed = False
         db_table = 'tipo_macchina'
+        
+    def __str__(self):
+        return self.tipo_macchina
