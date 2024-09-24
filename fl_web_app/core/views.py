@@ -14,6 +14,7 @@ class SchedaLavorazioneListView(ListView):
 
     # Se vuoi ordinare i risultati, puoi aggiungere il seguente attributo:
     ordering = ['-created_at']  # Ordina per data di creazione, decrescente
+    paginate_by = 10  # Numero di record per pagina
     
 class SchedaLavorazioneDetailView(DetailView):
     model = SchedaLavorazione

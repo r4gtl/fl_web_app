@@ -3,7 +3,7 @@
 {% block content %}
     <h4>Lista delle Schede di Lavorazione</h4>
     
-        <table class="table table-dark table-hover">
+        <table class="table table-striped table-hover">
             <thead>
               <tr>
                 <th scope="col">Scheda n.</th>
@@ -18,8 +18,21 @@
 
                 <td>{{ scheda.id_scheda }}</td>
                 <td>{{ scheda.created_at }}</td>
-                <td>{{ scheda.idcliente }}</td>
-                <td>{{ scheda.idgruppo }}</td>
+
+                <td>
+                  {% if scheda.idcliente %}
+                    {{ scheda.idcliente }}
+                  {% else %}
+                    <span class="text-danger">Cliente non presente</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if scheda.idgruppo %}
+                    {{ scheda.idgruppo }}
+                  {% else %}
+                    <span class="text-danger">Articolo non presente</span>
+                  {% endif %}
+                </td>
                 
             </tr>
             </tbody>
@@ -28,7 +41,43 @@
                 <li>Nessuna scheda di lavorazione disponibile.</li>
             {% endfor %}
         </table>
-              
+        
+        {% if is_paginated %}
+  <nav aria-label="Paginazione">
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1" aria-label="Prima">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Precedente">
+            <span aria-hidden="true">&lsaquo;</span>
+          </a>
+        </li>
+      {% endif %}
+
+      <li class="page-item">
+        <span class="page-link">Pagina {{ page_obj.number }} di {{ page_obj.paginator.num_pages }}</span>
+      </li>
+
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Successiva">
+            <span aria-hidden="true">&rsaquo;</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Ultima">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endif %}
+
         
     
 {% endblock %}
