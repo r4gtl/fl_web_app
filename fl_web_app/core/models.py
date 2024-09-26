@@ -455,7 +455,7 @@ class Tblimpmacchina(models.Model):
 class Tblmacchine(models.Model):
     idmacchina = models.AutoField(db_column='IDMacchina', primary_key=True)  # Field name made lowercase.
     descrizione = models.CharField(db_column='Descrizione', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    id_tipo_macchina = models.ForeignKey('TipoMacchina', on_delete=models.CASCADE, blank=True, null=True)
+    id_tipo_macchina = models.ForeignKey('TipoMacchina', on_delete=models.CASCADE, blank=True, null=True, db_column='id_tipo_macchina')
 
     class Meta:
         managed = False

@@ -11,6 +11,8 @@ from core.views import SchedaLavorazioneListView
 urlpatterns = [    
     path('core/', include('core.urls')),    
     path("admin/", admin.site.urls),
+    path("accounts/", include('accounts.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('', SchedaLavorazioneListView.as_view(), name='home'),  # Homepage
     #path("__debug__/", include("debug_toolbar.urls")),
 ]

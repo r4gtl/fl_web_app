@@ -53,7 +53,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "core",
+    "accounts",
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"  # Framework scelto
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -70,7 +77,10 @@ ROOT_URLCONF = "fl_web_app.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        'DIRS': [BASE_DIR / 'templates',  # definizione con modulo pathlib
+                BASE_DIR / 'accounts/templates',
+                BASE_DIR / 'core/templates'                
+                ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
