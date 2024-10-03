@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import environ
+from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -154,8 +155,26 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+    ]
+
+MEDIA_URL = '/media/'
+
+# Imposta il percorso predefinito per STATIC_ROOT e MEDIA_ROOT
+STATIC_ROOT = env("STATIC_ROOT")
+MEDIA_ROOT = env("MEDIA_ROOT")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+MESSAGE_TAGS = {
+        messages.DEBUG: 'secondary',
+        messages.INFO: 'info',
+        messages.SUCCESS: 'success',
+        messages.WARNING: 'warning',
+        messages.ERROR: 'danger',
+ }

@@ -1,0 +1,49 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h4>Dettaglio Scheda di Lavorazione</h4>
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5>Scheda n. {{ scheda.id_scheda }} del {{ scheda.created_at }}</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <p class="mb-1"><strong>Cliente:</strong> {{ scheda.idcliente }}</p>
+                    <p class="mb-1"><strong>Articolo:</strong> {{ scheda.idgruppo }}</p>
+                    <p class="mb-1"><strong>Colore:</strong> {{ scheda.idcolore }}</p>
+                    <p class="mb-1"><strong>Stampa:</strong> {{ scheda.idtipostampa }}</p>
+                    <p class="mb-1"><strong>Fase:</strong> {{ scheda.idfase }}</p>
+                    <p><strong>Riferimenti:</strong> {{ scheda.rif_ddt }}</p>
+                    <div class="row">
+                        <div class="col">
+                            <p class="mb-1"><strong>Note:</strong> {{ scheda.note|default_if_none:"" }}</p>
+                        </div>
+                        <div class="col">
+                            <p class="mb-1"><strong>Note da Macchina:</strong> {{ scheda.note_da_macchina|default_if_none:"" }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <h6>Codice a Barre:</h6>
+                    <img src="data:image/png;base64,{{ barcode_image }}" alt="Codice a Barre">
+                    
+                </div>
+            </div>            
+            <!-- Form per aggiornare le note da macchina -->
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form|crispy }}
+            </div>
+            <button type="submit" class="btn btn-primary">Salva Note da Macchina</button>
+        </form>           
+
+
+
+        </div>
+        <div class="card-footer text-center">
+            <a href="{% url 'home' %}" class="btn btn-primary">Torna alla lista</a>
+        </div>
+    </div>
+{% endblock %}

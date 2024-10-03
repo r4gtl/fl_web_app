@@ -173,6 +173,7 @@ class Ricetta(models.Model):
     idfase = models.ForeignKey('Tblfasi', on_delete=models.CASCADE, blank=True, null=True)
     idmacchinario = models.ForeignKey('Tblmacchine', on_delete=models.CASCADE, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    note = models.TextField()
 
     class Meta:
         managed = False
@@ -252,6 +253,8 @@ class SchedaLavorazione(models.Model):
     idfase = models.ForeignKey('Tblfasi', on_delete=models.CASCADE, blank=True, null=True, db_column='idfase')
     created_at = models.DateField(auto_now_add=True, blank=True, null=True)
     rif_ddt = models.CharField(max_length=255, blank=True, null=True)
+    note = models.TextField(blank=True, null=True)
+    note_da_macchina = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
