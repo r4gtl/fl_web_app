@@ -1,0 +1,16 @@
+
+/* Messaggi di successo o errore in basso a destra */
+.fixed-bottom-message {
+    position: fixed;
+    bottom: 20px;
+    right: 20px; 
+    z-index: 1000; 
+    width: 400px; 
+    padding: 10px;
+    
+}
+
+table-header-custom {
+    background-color: #208b3a;
+    color: white;
+}

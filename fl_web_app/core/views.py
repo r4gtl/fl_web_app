@@ -77,7 +77,7 @@ class SchedaLavorazioneUpdateView(UpdateView):
     form_class = SchedaLavorazioneNoteForm
     template_name = 'core/scheda_detail.html'
     context_object_name = 'scheda'
-    success_message = 'Nota modificata correttamente!'
+    success_message = ' - Nota modificata correttamente!'
     
 
     def get_success_url(self):
