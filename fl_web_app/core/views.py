@@ -11,6 +11,33 @@ from .forms import SchedaLavorazioneNoteForm
 
 from .models import SchedaLavorazione  # Importa il modello
 
+from django.http import JsonResponse
+from django.core.paginator import Paginator
+
+
+
+def get_data(request):
+    try:
+        page_number = request.GET.get('page', 1)  # Ottieni il numero di pagina dalla richiesta
+        schede = SchedaLavorazione.objects.select_related('idcliente', 'idgruppo').values(
+            'id_scheda',
+            'created_at',
+            'idcliente__ragionesociale',  # Assicurati che questo campo esista nel modello Cliente
+            'idgruppo__descrizione'  # Assicurati che questo campo esista nel modello Gruppo
+        ).order_by('-id_scheda')  # Ordina i dati per id_scheda
+
+        paginator = Paginator(schede, 10)  # Mostra 10 schede per pagina
+        page_obj = paginator.get_page(page_number)
+
+        return JsonResponse({
+            'dati': list(page_obj),  # Restituisci i dati della pagina corrente
+            'has_next': page_obj.has_next(),
+            'has_previous': page_obj.has_previous(),
+            'current_page': page_obj.number,
+            'total_pages': paginator.num_pages
+        }, safe=False)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 class SchedaLavorazioneListView(ListView):
     model = SchedaLavorazione  # Modello da visualizzare

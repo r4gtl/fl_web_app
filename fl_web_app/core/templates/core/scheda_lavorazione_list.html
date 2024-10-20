@@ -1,83 +1,136 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h4>Lista delle Schede di Lavorazione</h4>
-    
-        <table class="table table-striped table-hover">
-            <thead class="table-header-custom">
-              <tr>
-                <th scope="col">Scheda n.</th>
-                <th scope="col">Data Scheda</th>
-                <th scope="col">Cliente</th>
-                <th scope="col">Articolo</th>
-              </tr>
-            </thead>
-            <tbody class="table-group-divider">
-            {% for scheda in schede %}
-            <tr onclick="window.location='{% url 'core:scheda_detail' scheda.id_scheda %}';" style="cursor: pointer;">
+<h4>Lista delle Schede di Lavorazione</h4>
 
-                <td>{{ scheda.id_scheda }}</td>
-                <td>{{ scheda.created_at }}</td>
+<div>
+  <span id="timer">Prossimo aggiornamento tra: 5 secondi</span>
+</div>
 
-                <td>
-                  {% if scheda.idcliente %}
+<table class="table table-striped table-hover" id="schede-table">
+    <thead class="table-header-custom">
+        <tr>
+            <th scope="col">Scheda n.</th>
+            <th scope="col">Data Scheda</th>
+            <th scope="col">Cliente</th>
+            <th scope="col">Articolo</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider" id="dati">
+        {% for scheda in schede %}
+        <tr onclick="window.location='{% url 'core:scheda_detail' scheda.id_scheda %}';" style="cursor: pointer;">
+            <td>{{ scheda.id_scheda }}</td>
+            <td>{{ scheda.created_at }}</td>
+            <td>
+                {% if scheda.idcliente %}
                     {{ scheda.idcliente }}
-                  {% else %}
+                {% else %}
                     <span class="text-danger">Cliente non presente</span>
-                  {% endif %}
-                </td>
-                <td>
-                  {% if scheda.idgruppo %}
+                {% endif %}
+            </td>
+            <td>
+                {% if scheda.idgruppo %}
                     {{ scheda.idgruppo }}
-                  {% else %}
+                {% else %}
                     <span class="text-danger">Articolo non presente</span>
-                  {% endif %}
-                </td>
-                
-            </tr>
-            </tbody>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">Nessuna scheda di lavorazione disponibile.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
-            {% empty %}
-                <li>Nessuna scheda di lavorazione disponibile.</li>
-            {% endfor %}
-        </table>
-        
-        {% if is_paginated %}
-  <nav aria-label="Paginazione">
+{% if is_paginated %}
+<nav aria-label="Paginazione">
     <ul class="pagination">
-      {% if page_obj.has_previous %}
+        {% if page_obj.has_previous %}
         <li class="page-item">
-          <a class="page-link" href="?page=1" aria-label="Prima">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
+            <a class="page-link" href="?page=1" aria-label="Prima">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
         </li>
         <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Precedente">
-            <span aria-hidden="true">&lsaquo;</span>
-          </a>
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Precedente">
+                <span aria-hidden="true">&lsaquo;</span>
+            </a>
         </li>
-      {% endif %}
+        {% endif %}
 
-      <li class="page-item">
-        <span class="page-link">Pagina {{ page_obj.number }} di {{ page_obj.paginator.num_pages }}</span>
-      </li>
+        <li class="page-item">
+            <span class="page-link">Pagina {{ page_obj.number }} di {{ page_obj.paginator.num_pages }}</span>
+        </li>
 
-      {% if page_obj.has_next %}
+        {% if page_obj.has_next %}
         <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Successiva">
-            <span aria-hidden="true">&rsaquo;</span>
-          </a>
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Successiva">
+                <span aria-hidden="true">&rsaquo;</span>
+            </a>
         </li>
         <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Ultima">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
+            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Ultima">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
         </li>
-      {% endif %}
+        {% endif %}
     </ul>
-  </nav>
+</nav>
 {% endif %}
 
-        
-    
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Assicurati di includere jQuery -->
+<script>
+  let currentPage = 1;  // Variabile per tenere traccia della pagina corrente
+  const intervalTime = 5000;  // Tempo in millisecondi per l'aggiornamento
+  let countdown = intervalTime / 1000;  // Countdown in secondi
+  const timerElement = document.getElementById('timer');  // Elemento del timer
+
+  function aggiornaDati() {
+      $.ajax({
+          url: '{% url "core:get_data" %}',  // Usa il nome della tua vista
+          method: 'GET',
+          data: { page: currentPage },  // Passa il numero di pagina
+          success: function(response) {
+              $('#dati').empty();  // Pulisci il contenuto precedente
+              console.log(response.dati); // Log dei dati ricevuti
+              // Aggiorna i dati nella tabella
+              response.dati.forEach(function(item) {
+                  $('#dati').append(
+                      `<tr onclick="window.location='{% url 'core:scheda_detail' '0' %}'.replace('0', '${item.id_scheda}');" style="cursor: pointer;">
+                          <td>${item.id_scheda}</td>
+                          <td>${item.created_at}</td>
+                          <td>${item.idcliente__ragionesociale ? item.idcliente__ragionesociale : '<span class="text-danger">Cliente non presente</span>'}</td>
+                          <td>${item.idgruppo__descrizione ? item.idgruppo__descrizione : '<span class="text-danger">Articolo non presente</span>'}</td>
+                      </tr>`
+                  );
+              });
+
+              // Reset del countdown
+              countdown = intervalTime / 1000;  // Resetta il countdown
+          },
+          error: function(xhr, status, error) {
+              console.error('Si è verificato un errore:', error);
+          }
+      });
+  }
+
+  // Funzione per aggiornare il timer
+  function updateTimer() {
+      timerElement.innerText = `Prossimo aggiornamento tra: ${countdown} secondi`;
+      countdown--;
+
+      // Se il countdown raggiunge 0, esegui l'aggiornamento dei dati
+      if (countdown < 0) {
+          aggiornaDati();
+          countdown = intervalTime / 1000;  // Resetta il countdown
+      }
+  }
+
+  // Esegui l'aggiornamento ogni secondo
+  setInterval(updateTimer, 1000);
+</script>
+
+
 {% endblock %}
