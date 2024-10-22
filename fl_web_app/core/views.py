@@ -45,7 +45,7 @@ class SchedaLavorazioneListView(ListView):
     context_object_name = 'schede'  # Nome con cui accedere ai dati nel template
 
     # Se vuoi ordinare i risultati, puoi aggiungere il seguente attributo:
-    ordering = ['-created_at']  # Ordina per data di creazione, decrescente
+    ordering = ['-id_scheda']  # Ordina per data di creazione, decrescente
     paginate_by = 10  # Numero di record per pagina
     
 class SchedaLavorazioneDetailView(DetailView):
@@ -99,7 +99,7 @@ class SchedaLavorazioneDetailView(DetailView):
         return super().form_valid(form)
     
 
-class SchedaLavorazioneUpdateView(UpdateView):
+class SchedaLavorazioneUpdateView_old(UpdateView):
     model = SchedaLavorazione
     form_class = SchedaLavorazioneNoteForm
     template_name = 'core/scheda_detail.html'
@@ -120,6 +120,60 @@ class SchedaLavorazioneUpdateView(UpdateView):
         scheda = self.get_object()
         barcode_value = f"{scheda.id_scheda}{scheda.created_at.strftime('%Y%m%d')}"
         print(f"barcode_value: {barcode_value}")
+        # Prova a ottenere la classe del codice a barre
+        barcode_class = barcode.get_barcode_class('code128')
+        if barcode_class is None:
+            raise ValueError("Errore nel recupero della classe barcode per code128")
+
+        # Genera il codice a barre
+        barcode_obj = barcode_class(barcode_value, writer=ImageWriter())
+        if barcode_obj is None:
+            raise ValueError("Errore nel recupero della classe barcode per oggetto")
+
+        # Salva il codice a barre in memoria
+        buffer = BytesIO()
+        barcode_obj.write(buffer)
+
+        # Converti l'immagine in base64
+        barcode_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+        # Aggiungi il codice a barre al contesto
+        context['barcode_image'] = barcode_image
+        
+        return context
+    
+from django.contrib import messages
+from django.urls import reverse_lazy
+from django.views.generic import UpdateView
+from .models import SchedaLavorazione
+from .forms import SchedaLavorazioneNoteForm
+import barcode
+from barcode.writer import ImageWriter
+from io import BytesIO
+import base64
+
+class SchedaLavorazioneUpdateView(UpdateView):
+    model = SchedaLavorazione
+    form_class = SchedaLavorazioneNoteForm
+    template_name = 'core/scheda_detail.html'
+    context_object_name = 'scheda'
+    success_message = ' - Nota modificata correttamente!'
+
+    def get_success_url(self):
+        # Redirect alla pagina di dettaglio della scheda
+        return reverse_lazy('core:scheda_detail', kwargs={'pk': self.object.pk})
+
+    def form_valid(self, form):
+        # Salva le modifiche all'oggetto esistente
+        messages.info(self.request, self.success_message)
+        return super().form_valid(form)  # Chiama il super per salvare l'oggetto esistente
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        scheda = self.get_object()
+        barcode_value = f"{scheda.id_scheda}{scheda.created_at.strftime('%Y%m%d')}"
+        print(f"barcode_value: {barcode_value}")
+        
         # Prova a ottenere la classe del codice a barre
         barcode_class = barcode.get_barcode_class('code128')
         if barcode_class is None:
