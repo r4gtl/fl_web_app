@@ -87,6 +87,18 @@
   let countdown = intervalTime / 1000;  // Countdown in secondi
   const timerElement = document.getElementById('timer');  // Elemento del timer
 
+
+  function formatDate(dateString) {
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    const formattedDate = new Date(dateString).toLocaleDateString('it-IT', options);
+
+    // Capitalizzare la prima lettera del mese
+    return formattedDate.replace(/^(.*?)\s(\w)/, (match, day, monthInitial) => {
+        return `${day} ${monthInitial.toUpperCase()}`;
+    });
+}
+
+
   function aggiornaDati() {
       $.ajax({
           url: '{% url "core:get_data" %}',  // Usa il nome della tua vista
@@ -100,7 +112,7 @@
                   $('#dati').append(
                       `<tr onclick="window.location='{% url 'core:scheda_detail' '0' %}'.replace('0', '${item.id_scheda}');" style="cursor: pointer;">
                           <td>${item.id_scheda}</td>
-                          <td>${item.created_at}</td>
+                          <td>${formatDate(item.created_at)}</td>
                           <td>${item.idcliente__ragionesociale ? item.idcliente__ragionesociale : '<span class="text-danger">Cliente non presente</span>'}</td>
                           <td>${item.idgruppo__descrizione ? item.idgruppo__descrizione : '<span class="text-danger">Articolo non presente</span>'}</td>
                       </tr>`

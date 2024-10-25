@@ -4,8 +4,8 @@ from .base import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['your-production-domain.com']
-
+ALLOWED_HOSTS = ['192.168.1.43']
+print("Production: PRODUCTION")
 # Configurazioni specifiche per la produzione
 DATABASES = {
     'default': {

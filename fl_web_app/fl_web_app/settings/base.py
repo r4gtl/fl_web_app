@@ -30,19 +30,20 @@ environ.Env.read_env(BASE_DIR / '.env')
 
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = "django-insecure-h3j1#&la+8ln5h(lf#+-47)ct!8g9g6f1$a@%&w%dghm*6pe&v"
+# Ottieni l'indirizzo IP dall'ambiente
+HOST_IP = env('HOST_IP')
 
 # False if not in os.environ because of casting above
 DEBUG = env('DEBUG')
 
 SECRET_KEY = env('SECRET_KEY')
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.43', '0.0.0.0']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', HOST_IP, '0.0.0.0']
 
+CSRF_TRUSTED_ORIGINS = [
+    f'http://{HOST_IP}:8081',
+    'http://localhost:8081',  # se stai testando anche in locale
+]
 
 # Application definition
 
