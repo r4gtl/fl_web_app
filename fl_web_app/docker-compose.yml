@@ -12,6 +12,7 @@ services:
       - .env
     networks:
       - fl_web_app_my_docker_network
+    restart: always
 
   nginx:
     image: nginx:latest
@@ -23,6 +24,7 @@ services:
       - web
     networks:
       - fl_web_app_my_docker_network
+    restart: always
 
 networks:
   fl_web_app_my_docker_network:
