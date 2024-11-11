@@ -13,11 +13,12 @@
         <div class="row">
             <div class="col">
                 <p class="mb-1"><strong>Cliente:</strong> {{ scheda.idcliente }}</p>
+                <p class="mb-1"><strong>Pezzi:</strong> {{ scheda.pezzi|default_if_none:"" }}</p>
                 <p class="mb-1"><strong>Articolo:</strong> {{ scheda.idgruppo }}</p>
                 <p class="mb-1"><strong>Colore:</strong> {{ scheda.idcolore }}</p>
                 <p class="mb-1"><strong>Stampa:</strong> {{ scheda.idtipostampa }}</p>
                 <p class="mb-1"><strong>Fase:</strong> {{ scheda.idfase }}</p>
-                <p><strong>Riferimenti:</strong> {{ scheda.rif_ddt }}</p>
+                <p><strong>Riferimenti:</strong> {{ scheda.rif_ddt|default_if_none:"" }}</p>
                 <div class="row">
                     <div class="col">
                         <p class="mb-1"><strong>Note:</strong> {{ scheda.note|default_if_none:"" }}</p>

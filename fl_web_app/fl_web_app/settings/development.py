@@ -3,7 +3,8 @@ from .base import *
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '192.168.1.43']
+#ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '192.168.1.43']
+ALLOWED_HOSTS = env('ALLOWED_HOSTS_DEVELOPMENT').split(',')
 
 # Configurazioni specifiche per lo sviluppo
 DATABASES = {

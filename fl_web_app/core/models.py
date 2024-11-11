@@ -255,6 +255,7 @@ class SchedaLavorazione(models.Model):
     rif_ddt = models.CharField(max_length=255, blank=True, null=True)
     note = models.TextField(blank=True, null=True)
     note_da_macchina = models.TextField(blank=True, null=True)
+    pezzi = models.PositiveSmallIntegerField()
 
     class Meta:
         managed = False

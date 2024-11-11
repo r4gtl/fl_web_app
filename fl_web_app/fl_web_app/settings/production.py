@@ -4,8 +4,9 @@ from .base import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['192.168.1.43']
-print("Production: PRODUCTION")
+#ALLOWED_HOSTS = ['192.168.1.43']
+ALLOWED_HOSTS = env('ALLOWED_HOSTS_PRODUCTION').split(',')
+
 # Configurazioni specifiche per la produzione
 DATABASES = {
     'default': {
